@@ -5,7 +5,6 @@ from random import randint
 
 class LinkLayer:
 
-
     #Construtor da classe LinkLayer
     def __init__(self, phyLayer):
         #Qunatidade de tempo que o host tem que esperar caso o meio esteja ocupado
@@ -28,7 +27,6 @@ class LinkLayer:
         self._receiving = False
         #Pacote recebido com sucesso
         self._received = False
-    
 
 
     #Função responsável a enviar a um vizinho especifico

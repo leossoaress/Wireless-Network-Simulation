@@ -21,6 +21,7 @@ class PhysicalLayer:
             if((host._id != self._id) and (inRange(self._x, self._y, self._range, host._linkLayer._phyLayer._x, host._linkLayer._phyLayer._y))):
                 self._neighboors.append(host) 
 
+
     #Função que transmite o pacote para o meio
     def sendPackage(self):
         self.checkNeighboor()

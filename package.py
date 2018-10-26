@@ -1,3 +1,5 @@
+from headers import Header
+
 class Package:
 
     #Construtor da classe Package
@@ -23,3 +25,4 @@ class Package:
     @staticmethod
     def createPackage(message, duration):
         return Package(message, duration)
+

@@ -1,5 +1,6 @@
 from host import Host
 from lists import hosts
+from lists import hosts
 from package import Package
 
 #Instaciando os hosts
@@ -18,5 +19,6 @@ for i in range(15):
     for host in hosts:
         host._linkLayer.receivePackage(host._id)
         host._linkLayer.sendPackage()
+
 
 

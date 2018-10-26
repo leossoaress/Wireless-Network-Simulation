@@ -1,7 +1,7 @@
 from linklayer import LinkLayer
 from physicallayer import PhysicalLayer
 from lists import hosts
-from package import Package
+from package import Package 
 from headers import Header
 
 class Host:
@@ -17,7 +17,7 @@ class Host:
 
         #Inicializa a camada de enlace
         self._linkLayer = LinkLayer(PhysicalLayer(x, y, id, range))
-    
+
     def createPackage(self, message, destination, duration):
         package = Package(message, duration)
         header = Header(1, id, destination)
