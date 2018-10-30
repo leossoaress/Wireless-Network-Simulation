@@ -18,7 +18,7 @@ class PhysicalLayer:
     #Função que descobre o nós vizihos
     def checkNeighboor(self):
         for host in hosts:
-            if((host._id != self._id) and (inRange(self._x, self._y, self._range, host._linkLayer._phyLayer._x, host._linkLayer._phyLayer._y))):
+            if((host._id != self._id) and (inRange(self._x, self._y, self._range, host._networkLayer._linkLayer._phyLayer._x, host._networkLayer._linkLayer._phyLayer._y))):
                 self._neighboors.append(host) 
 
 
@@ -26,7 +26,7 @@ class PhysicalLayer:
     def sendPackage(self):
         self.checkNeighboor()
         for host in self._neighboors:
-            host._linkLayer._phyLayer.receivePackage(self._sendPackages[0])
+            host._networkLayer._linkLayer._phyLayer.receivePackage(self._sendPackages[0])
         self._backupPackages.append(self._sendPackages.pop(0))
 
     def receivePackage(self, package):

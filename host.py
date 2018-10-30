@@ -1,5 +1,6 @@
 from linklayer import LinkLayer
 from physicallayer import PhysicalLayer
+from networklayer import NetworkLayer
 from lists import hosts
 from package import Package 
 from headers import Header
@@ -16,10 +17,13 @@ class Host:
         hosts.append(self)
 
         #Inicializa a camada de enlace
-        self._linkLayer = LinkLayer(PhysicalLayer(x, y, id, range))
+        self._networkLayer = NetworkLayer(LinkLayer(PhysicalLayer(x, y, id, range)))
 
-    def createPackage(self, message, destination, duration):
-        package = Package(message, duration)
-        header = Header(1, id, destination)
-        package.addHeader(header)
-        self._linkLayer._phyLayer._sendPackages.append(package)
+
+    def createPackage(self, macDestiny, message, duration):
+        
+        print("Pacote criado!")
+        print("")
+        self._networkLayer.addPackage(macDestiny, message, duration)
+    
+        

@@ -28,6 +28,10 @@ class LinkLayer:
         #Pacote recebido com sucesso
         self._received = False
 
+        self._receivingPackage = []
+
+        self._counter = 0
+
 
     #Função responsável a enviar a um vizinho especifico
     def sendPackage(self):
@@ -63,24 +67,30 @@ class LinkLayer:
 
 
     #Função responsável para descartar os pacotes que não são para o host
-    def receivePackage(self, id):
+    def receivePackage(self):
         
         if(self._phyLayer._receivePackages != [] and self._sending == False and self._receiving == False):
+            
             package = self._phyLayer._receivePackages.pop(0)
+            header = package.getLinkHeader()
+
             self._receiveDuration = package._duration
             self._receiving = True
             print("ID",self._phyLayer._id,": Inicio do recebimento do pacote!")
 
-            if(package._headers[0]._idDest == id):
-                self._readedPackages.append(package)
-            elif(package._headers[0]._idDest == -1):
-                self._readedPackages.append(package)
+            
+            if(header._macDestiny == self._phyLayer._id):
+                self._receivingPackage.append(package)
+            elif(header._macDestiny  == -1):
+                self._receivingPackage.append(package)
         
         elif(self._receiving == True):
             self._receiveDuration -= 1
             if(self._receiveDuration == 0):
                 self._receiving = False
                 print("ID",self._phyLayer._id,": Pacote recebido!")
+                if(self._receivingPackage != []):
+                    self._readedPackages.append(self._receivingPackage.pop(0))
             else:
                 print("ID",self._phyLayer._id,": Recebendo pacote!")
 
@@ -89,3 +99,11 @@ class LinkLayer:
         if(self._phyLayer._receivePackages == []):
             return True
         return False 
+
+
+    def addPackage(self, package, macDestiny):
+        
+        header = Header("LINK", self._phyLayer._id, macDestiny, self._counter, -1, -1, -1)
+        package.addHeader(header)
+
+        self._phyLayer._sendPackages.append(package)

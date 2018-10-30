@@ -26,3 +26,23 @@ class Package:
     def createPackage(message, duration):
         return Package(message, duration)
 
+    #Função que exibe as informações do pacote
+    def printPackage(self):
+        print("Data: ", self._data)
+
+    
+    def getLinkHeader(self):
+        for header in self._headers:
+            if(header._type == "LINK"):
+                return header
+
+
+    def getNetworkHeader(self):
+        for header in self._headers:
+            if(header._type == "NETWORK"):
+                return header
+
+    def updateSequence(self, sequence):
+        for header in self._headers:
+            if(header._type == "NETWORK"):
+                header._sequenceList = sequence
