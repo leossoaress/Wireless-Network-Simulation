@@ -15,11 +15,13 @@ class PhysicalLayer:
         self._receivePackages = []
         self._backupPackages = []
 
+
     #Função que descobre o nós vizihos
     def checkNeighboor(self):
         for host in hosts:
             if((host._id != self._id) and (inRange(self._x, self._y, self._range, host._networkLayer._linkLayer._phyLayer._x, host._networkLayer._linkLayer._phyLayer._y))):
-                self._neighboors.append(host) 
+                if(host not in self._neighboors):
+                    self._neighboors.append(host) 
 
 
     #Função que transmite o pacote para o meio
@@ -30,4 +32,5 @@ class PhysicalLayer:
         self._backupPackages.append(self._sendPackages.pop(0))
 
     def receivePackage(self, package):
+        print("ID", self._id, ": Pacote recebido de: ", package._headers[1]._macOrigin)
         self._receivePackages.append(package)

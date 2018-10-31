@@ -9,9 +9,11 @@ a = Host(0,2,1,1)
 b = Host(1,2,2,1)
 c = Host(2,2,3.5,1)
 
-a.createPackage(b._id, "Eu sou o host A", 2)
+a.createPackage(c._id, "Eu sou o host A", 2)
+#a.createPackage(b._id, "Eu sou o host A", 2)
+#c.createPackage(b._id, "Eu sou o host C", 2)
 
-for i in range(15):
+for i in range(20):
 
     print("")
     print("Time: ", i)

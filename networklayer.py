@@ -27,7 +27,17 @@ class NetworkLayer:
         package.addHeader(header)
         
         print("ID", self._linkLayer._phyLayer._id, ": Enviando um RREP com destino para ", header._macDestiny)
-        self._linkLayer.addPackage(package, macDestiny)
+        
+        for index,mac in enumerate(header._sequenceList):
+            if(mac == self._linkLayer._phyLayer._id):
+                
+                nextDestiny = header._sequenceList[index+1]
+                nextPackage = package
+                print("ID", self._linkLayer._phyLayer._id, ": Repassando RREP por ", nextDestiny)
+                self._linkLayer.addPackage(nextPackage, nextDestiny)
+                break
+       
+       # self._linkLayer.addPackage(package, -1)
 
 
     def sendRREQ(self, macDestiny):
@@ -41,29 +51,27 @@ class NetworkLayer:
         package.addHeader(header)
         
         print("ID", self._linkLayer._phyLayer._id, ": Enviando um RREQ com destino para ", header._macDestiny)
-        self._linkLayer.addPackage(package, macDestiny)
+        self._linkLayer.addPackage(package, -1)
         
 
     def receivePackage(self):
 
         self._linkLayer.receivePackage()
-        print("ID", self._linkLayer._phyLayer._id, ": Dentro da função de receber pacote")
 
         if(self._linkLayer._readedPackages != []):
             
-            print("ID", self._linkLayer._phyLayer._id, ": Tem pacote sendo recebido")
             package = self._linkLayer._readedPackages.pop(0)
             header = package.getNetworkHeader()
 
             if(header._request == -1):
                 
-                print("ID", self._linkLayer._phyLayer._id, ": O pacote é normal")
                 if(header._macDestiny == self._linkLayer._phyLayer._id):
-                    print("ID", self._linkLayer._phyLayer._id, ": Pacote chegou: ", package._data)
+                    print("ID", self._linkLayer._phyLayer._id, ": Chegada de pacote normal: ", package._data)
 
             elif(header._request == 0):
                 
-                print("ID", self._linkLayer._phyLayer._id, ": O pacote é um RREQ")
+                print("ID", self._linkLayer._phyLayer._id, ": Chegada de pacote RREQ")
+                
                 if(not header._sequenceNumber in self._listRREQs):
                     self._listRREQs.append(header._sequenceNumber)
                     header._sequenceList.append(self._linkLayer._phyLayer._id)
@@ -81,7 +89,7 @@ class NetworkLayer:
             elif(header._request == 1):
                 
                 destiny = header._macDestiny
-                print("ID", self._linkLayer._phyLayer._id, ": O pacote é um RREP")
+                print("ID", self._linkLayer._phyLayer._id, ": Chegada de pacote RREP: ", header._sequenceList)
 
                 if(destiny == self._linkLayer._phyLayer._id):
 
@@ -91,13 +99,14 @@ class NetworkLayer:
 
                 else:
 
-                    for index,mac in enumerate(header.sequenceList):
+                    for index,mac in enumerate(header._sequenceList):
 
                         if(mac == self._linkLayer._phyLayer._id):
 
-                            nextDestiny = header._sequenceList(index+1)
+                            nextDestiny = header._sequenceList[index+1]
                             nextPackage = package
                             self._linkLayer.addPackage(nextPackage, nextDestiny)
+                            break
 
 
     def addPackage(self, macDestiny, message, time):
@@ -110,11 +119,8 @@ class NetworkLayer:
 
     def sendPackage(self):
         
-        print("ID", self._linkLayer._phyLayer._id, ": Dentro da funcao de enviar")
-        
         if(self._listPackages != []):
             
-            print("ID", self._linkLayer._phyLayer._id, ": Tem pacotes para enviar")
             package = self._listPackages[0]
             header = package.getNetworkHeader()
             sequence = None
@@ -122,18 +128,17 @@ class NetworkLayer:
             for route in self._routes:
                 if(route._destiny == package._headers[0]._macDestiny):
                     sequence = route._sequence  
-                    self._waitingRouteToList.remove(package._headers[0]._macDestiny)
+                    if (package._headers[0]._macDestiny in self._waitingRouteToList):
+                        self._waitingRouteToList.remove(package._headers[0]._macDestiny)
 
             if(sequence != None):
                 
-                print("ID", self._linkLayer._phyLayer._id, ": Não tem sequencia para o destinatario")
                 package.updateSequence(sequence)
                 self._listPackages.pop(0)
                 self._linkLayer.addPackage(package, package._headers[0]._macDestiny)
                 
             elif(not header._macDestiny in self._waitingRouteToList):
 
-                print("ID", self._linkLayer._phyLayer._id, ": Esta esperando o caminho para enviar")
                 self._waitingRouteToList.append(package._headers[0]._macDestiny)
                 self.sendRREQ(package._headers[0]._macDestiny)
 
