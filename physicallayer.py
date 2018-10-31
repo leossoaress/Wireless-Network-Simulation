@@ -1,6 +1,7 @@
 from utilities import inRange
 from package import Package
 from lists import hosts
+from lists import indicesToRead
 
 class PhysicalLayer:
 
@@ -32,5 +33,5 @@ class PhysicalLayer:
         self._backupPackages.append(self._sendPackages.pop(0))
 
     def receivePackage(self, package):
-        print("ID", self._id, ": Pacote recebido de: ", package._headers[1]._macOrigin)
+        indicesToRead.append(self._id)
         self._receivePackages.append(package)

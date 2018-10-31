@@ -22,8 +22,7 @@ class Host:
 
     def createPackage(self, macDestiny, message, duration):
         
-        print("Pacote criado!")
-        print("")
+        print("ID", self._networkLayer._linkLayer._phyLayer._id, ": Pacote criado com destino para", macDestiny )
         self._networkLayer.addPackage(macDestiny, message, duration)
     
         

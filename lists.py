@@ -2,3 +2,5 @@
 coordinates = []
 hosts = []
 packages = []
+indicesToSend = []
+indicesToRead = []
