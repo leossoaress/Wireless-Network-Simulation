@@ -20,6 +20,7 @@ class Host:
         self._networkLayer = NetworkLayer(LinkLayer(PhysicalLayer(x, y, id, range)))
 
 
+    #Função para criar um pacote
     def createPackage(self, macDestiny, message, duration):
         
         print("ID", self._networkLayer._linkLayer._phyLayer._id, ": Pacote criado com destino para", macDestiny )

@@ -32,6 +32,8 @@ class PhysicalLayer:
             host._networkLayer._linkLayer._phyLayer.receivePackage(self._sendPackages[0])
         self._backupPackages.append(self._sendPackages.pop(0))
 
+
+    #Função que recebe o pacote pelo meio
     def receivePackage(self, package):
         indicesToRead.append(self._id)
         self._receivePackages.append(package)

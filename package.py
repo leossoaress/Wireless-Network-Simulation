@@ -36,7 +36,6 @@ class Package:
             if(header._type == "LINK"):
                 return header
 
-
     def getNetworkHeader(self):
         for header in self._headers:
             if(header._type == "NETWORK"):
